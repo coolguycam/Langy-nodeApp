@@ -1,5 +1,5 @@
 {
-  "name": "Langy-nodeApp",
+  "name": "langy-nodeapp",
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/coolguycam/Langy-nodeApp/issues"
   },
-  "homepage": "https://github.com/coolguycam/Langy-nodeApp#readme"
+  "homepage": "https://github.com/coolguycam/Langy-nodeApp#readme",
+  "dependencies": {
+    "dotenv": "^5.0.1",
+    "inquirer": "^5.2.0",
+    "twitter": "^1.7.1"
+  }
 }
