@@ -1,25 +1,73 @@
-require("dotenv").config();
-
-// const stuff = require("./app.js");
+const stuff = require("./app.js");
+const fs = require("fs");
 const inquirer = require("inquirer");
-const client = new Twitter({
-    consumer_key: process.env.TWITTER_CONSUMER_KEY,
-    consumer_secret: process.env.TWITTER_CONSUMER_SECRET,
-    access_token_key: process.env.TWITTER_ACCESS_TOKEN_KEY,
-    access_token_secret: process.env.TWITTER_ACCESS_TOKEN_SECRET
-});
 
-const params = { screen_name: "keeelacam" };
-client.get("statuses/user_timeline", params, function(error, tweets, response) {
-  if (!error) {
-    console.log(tweets);
-  }
-});
+var update = new Date();
+update = update.toDateString();
 
-client.get("search/tweets", { q: "node.js" }, function(
-  error,
-  tweets,
-  response
-) {
-  console.log(tweets);
-});
+function langy() {
+  console.log("here");
+  inquirer.prompt([
+      {
+        type: "list",
+        message: "What would you want to see?",
+        choices: ["Twitter"],
+        name: "selection"
+      }
+    ])
+    .then(function(user) {
+      fs.appendFile(
+        "log2.txt",
+        "\n\n User input acquired at: " + update + "\n\n",
+        function(err) {
+          if (err) {
+            throw err;
+          }
+        }
+      );
+
+      switch (user.action) {
+        case "Twitter":
+          var twitter = require("twitter");
+          var me = new Twitter(keys.twitterKeys);
+          var myName = { screen_name: user.username };
+          me.get("statuses/user_timeline", myName, function(
+            error,
+            tweet,
+            response
+          ) {
+            if (!error) {
+              console.log("Here are your last 20 Tweets:");
+              console.log("\n");
+              fs.appendFile(
+                "log2.txt",
+                "\nKeeelaCam's last 20 tweets " + user.username + ": \n ",
+                function(err) {
+                  if (err) throw err;
+                }
+              );
+
+              for (var i = 0; i < 20; i++) {
+                console.log(tweet[i].text);
+                console.log("Date/Time created: " + tweet[i].created_at);
+                console.log("");
+
+                fs.appendFile(
+                  "log2.txt",
+                  tweet[i].text +
+                    "\nDate/Time created: " +
+                    tweet[i].created_at +
+                    "\n \n",
+                  function(err) {
+                    if (err) throw err;
+                  }
+                );
+              }
+              liri();
+            } else {
+              console.log(error);
+            }
+          });
+      }
+    });
+}
