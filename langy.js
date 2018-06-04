@@ -44,8 +44,9 @@ function langy() {
               if (err) throw err;
             }
           );
-
-          for (var i = 0; i < 20; i++) {
+          // console.log(tweet);
+          
+          for (var i = 0; i < 7; i++) {
             console.log(tweet[i].text);
             console.log("Date/Time created: " + tweet[i].created_at);
             console.log("");
@@ -61,7 +62,7 @@ function langy() {
               }
             );
           }
-          langy();
+          // langy();
         } else {
           console.log(error);
         }
