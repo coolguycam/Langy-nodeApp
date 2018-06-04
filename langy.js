@@ -7,7 +7,8 @@ update = update.toDateString();
 
 function langy() {
   console.log("here");
-  inquirer.prompt([
+  inquirer
+    .prompt([
       {
         type: "list",
         message: "What would you want to see?",
@@ -18,56 +19,54 @@ function langy() {
     .then(function(user) {
       fs.appendFile(
         "log2.txt",
-        "\n\n User input acquired at: " + update + "\n\n",
+        "\n\n User input request at: " + update + "\n\n",
         function(err) {
           if (err) {
             throw err;
           }
         }
       );
-
-      switch (user.action) {
-        case "Twitter":
-          var twitter = require("twitter");
-          var me = new Twitter(keys.twitterKeys);
-          var myName = { screen_name: user.username };
-          me.get("statuses/user_timeline", myName, function(
-            error,
-            tweet,
-            response
-          ) {
-            if (!error) {
-              console.log("Here are your last 20 Tweets:");
-              console.log("\n");
-              fs.appendFile(
-                "log2.txt",
-                "\nKeeelaCam's last 20 tweets " + user.username + ": \n ",
-                function(err) {
-                  if (err) throw err;
-                }
-              );
-
-              for (var i = 0; i < 20; i++) {
-                console.log(tweet[i].text);
-                console.log("Date/Time created: " + tweet[i].created_at);
-                console.log("");
-
-                fs.appendFile(
-                  "log2.txt",
-                  tweet[i].text +
-                    "\nDate/Time created: " +
-                    tweet[i].created_at +
-                    "\n \n",
-                  function(err) {
-                    if (err) throw err;
-                  }
-                );
-              }
-              liri();
-            } else {
-              console.log(error);
+      var Twitter = require("twitter");
+      var me = new Twitter(stuff.twitter);
+      var myName = { screen_name: "KeeelaCam" };
+      me.get("statuses/user_timeline", myName, function(
+        error,
+        tweet,
+        response
+      ) {
+        if (!error) {
+          console.log("Here are your last 20 Tweets:");
+          console.log("\n");
+          fs.appendFile(
+            "log2.txt",
+            "\nKeeelaCam's last 20 tweets " + user.username + ": \n ",
+            function(err) {
+              if (err) throw err;
             }
-          });
-      }
+          );
+
+          for (var i = 0; i < 20; i++) {
+            console.log(tweet[i].text);
+            console.log("Date/Time created: " + tweet[i].created_at);
+            console.log("");
+
+            fs.appendFile(
+              "log2.txt",
+              tweet[i].text +
+                "\nDate/Time created: " +
+                tweet[i].created_at +
+                "\n \n",
+              function(err) {
+                if (err) throw err;
+              }
+            );
+          }
+          langy();
+        } else {
+          console.log(error);
+        }
+      });
     });
 }
+
+langy();
